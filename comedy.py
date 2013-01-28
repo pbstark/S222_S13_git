@@ -1,3 +1,4 @@
 #!/usr/bin/env python
 
-import this
+datadir = 'Data/comedy_comparisons'
+print datadir
