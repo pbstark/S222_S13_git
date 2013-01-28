@@ -4,8 +4,7 @@ datadir = 'Data'
 
 def main():
     subdir = 'comedy_comparisons'
-    print datadir
-    print subdir
+    print datadir + '/' + subdir
 
 if __name__ == "__main__":
     main()
