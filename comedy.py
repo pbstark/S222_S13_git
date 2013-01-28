@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-datadir = 'Data/comedy_comparisons'
-print datadir
+datadir = 'Data'
 
 def main():
-    pass
+    subdir = 'comedy_comparisons'
+    print datadir
+    print subdir
 
 if __name__ == "__main__":
     main()
