@@ -5,6 +5,9 @@ from itertools import islice
 import os.path
 import sqlite3
 
+import gdata.youtube
+import gdata.youtube.service
+
 datadir = 'Data'
 
 def take(n, iterable):
@@ -49,6 +52,15 @@ def convert_comedy_comparisons(conn):
 def main():
     with sqlite3.connect(':memory:') as conn:
         convert_comedy_comparisons(conn)
+
+        yt_service = gdata.youtube.service.YouTubeService()
+
+        c = conn.cursor()
+        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+        for (best, runnerup) in c:
+            best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
+            runnerup_entry = yt_service.GetYouTubeVideoEntry(video_id=runnerup)
+            print best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
 
 if __name__ == "__main__":
     main()
