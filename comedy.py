@@ -12,7 +12,9 @@ def main():
     data = None
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
-        print data
+
+        for row in data:
+            print row
 
 if __name__ == "__main__":
     main()
