@@ -25,7 +25,7 @@ def main():
         data = csv.reader(csvfile, delimiter=',')
 
         for row in take(5, data):
-            print normalize(row[0],row[1],row[2])
+            print normalize(*row)
 
 if __name__ == "__main__":
     main()
