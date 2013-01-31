@@ -55,7 +55,7 @@ class ComedyComparison:
     def __init__(self):
         self.yt_service = gdata.youtube.service.YouTubeService()
 
-    def is_better_than(best, runnerup):
+    def is_better_than(self, best, runnerup):
         best_entry = self.yt_service.GetYouTubeVideoEntry(video_id=best)
         runnerup_entry = self.yt_service.GetYouTubeVideoEntry(video_id=runnerup)
         value = best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
