@@ -58,9 +58,12 @@ def main():
         c = conn.cursor()
         c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
         for (best, runnerup) in c:
-            best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
-            runnerup_entry = yt_service.GetYouTubeVideoEntry(video_id=runnerup)
-            print best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
+            try:
+                best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
+                runnerup_entry = yt_service.GetYouTubeVideoEntry(video_id=runnerup)
+                print best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
+            except gdata.service.RequestError, err:
+                print err
 
 if __name__ == "__main__":
     main()
