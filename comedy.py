@@ -13,8 +13,10 @@ def take(n, iterable):
 
 def normalize(a, b, key):
     if key == 'left':
+        # best
         return [a,b]
     else:
+        # runnerup
         return [b,a]
 
 def main():
@@ -32,7 +34,12 @@ def main():
         print "Converting csv data into sqlite3..."
         with sqlite3.connect(':memory:') as conn:
             c = conn.cursor()
-            # c.execute('''WRITE SOME SQL TO DO SOMETHING''')
+            c.execute("""
+              CREATE TABLE preference (
+                id INTEGER PRIMARY KEY,
+                best TEXT,
+                runnerup TEXT)
+              """)
             conn.commit()
 
 if __name__ == "__main__":
