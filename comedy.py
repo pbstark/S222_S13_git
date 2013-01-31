@@ -7,7 +7,9 @@ datadir = 'Data'
 def main():
     subdir = 'comedy_comparisons'
     test_file = 'comedy_comparisons.test'
-    print os.path.join(datadir, subdir, test_file)
+    test_data = os.path.join(datadir, subdir, test_file)
+    csvfile = open(test_data, 'r')
+    print csvfile
 
 if __name__ == "__main__":
     main()
