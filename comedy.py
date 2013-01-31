@@ -40,6 +40,8 @@ def main():
                 best TEXT,
                 runnerup TEXT)
               """)
+            for row in data:
+                c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
             conn.commit()
 
 if __name__ == "__main__":
