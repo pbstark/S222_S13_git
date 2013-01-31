@@ -19,7 +19,7 @@ def normalize(a, b, key):
         # runnerup
         return [b,a]
 
-def main():
+def convert_comedy_comparisons(conn):
     subdir = 'comedy_comparisons'
     test_file = 'comedy_comparisons.test'
     test_data = os.path.join(datadir, subdir, test_file)
@@ -32,17 +32,23 @@ def main():
             print normalize(*row)
 
         print "Converting csv data into sqlite3..."
-        with sqlite3.connect(':memory:') as conn:
-            c = conn.cursor()
-            c.execute("""
-              CREATE TABLE preference (
-                id INTEGER PRIMARY KEY,
-                best TEXT,
-                runnerup TEXT)
-              """)
-            for row in data:
-                c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
-            conn.commit()
+        c = conn.cursor()
+        c.execute("""
+          CREATE TABLE preference (
+            id INTEGER PRIMARY KEY,
+            best TEXT,
+            runnerup TEXT)
+          """)
+        for row in data:
+            c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
+        conn.commit()
+        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+        for row in c:
+            print row
+
+def main():
+    with sqlite3.connect(':memory:') as conn:
+        convert_comedy_comparisons(conn)
 
 if __name__ == "__main__":
     main()
