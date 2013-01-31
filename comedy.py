@@ -56,7 +56,7 @@ def main():
         yt_service = gdata.youtube.service.YouTubeService()
 
         c = conn.cursor()
-        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+        c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
         for (best, runnerup) in c:
             try:
                 best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
