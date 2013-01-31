@@ -49,6 +49,12 @@ def convert_comedy_comparisons(conn):
         for row in c:
             print row
 
+def is_better_than(best, runnerup):
+    best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
+    runnerup_entry = yt_service.GetYouTubeVideoEntry(video_id=runnerup)
+    value = best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
+    return value
+
 def main():
     with sqlite3.connect(':memory:') as conn:
         convert_comedy_comparisons(conn)
@@ -59,9 +65,7 @@ def main():
         c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
         for (best, runnerup) in c:
             try:
-                best_entry = yt_service.GetYouTubeVideoEntry(video_id=best)
-                runnerup_entry = yt_service.GetYouTubeVideoEntry(video_id=runnerup)
-                print best_entry.media.title.text, "is better than", runnerup_entry.media.title.text
+                print is_better_than(best, runnerup)
             except gdata.service.RequestError, err:
                 print err
 
