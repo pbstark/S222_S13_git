@@ -3,6 +3,7 @@
 import csv
 from itertools import islice
 import os.path
+import sqlite3
 
 datadir = 'Data'
 
@@ -24,8 +25,16 @@ def main():
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
+        print "Sample data from csv file"
         for row in take(5, data):
             print normalize(*row)
+
+        print "Converting csv data into sqlite3..."
+        conn = sqlite3.connect(':memory:')
+        c = conn.cursor()
+        # c.execute('''WRITE SOME SQL TO DO SOMETHING''')
+        conn.commit()
+        conn.close()
 
 if __name__ == "__main__":
     main()
