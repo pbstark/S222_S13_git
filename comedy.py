@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 
 import csv
+from itertools import islice
 import os.path
 
 datadir = 'Data'
+
+def take(n, iterable):
+    "Return first n items of the iterable as a list"
+    return list(islice(iterable, n))
 
 def main():
     subdir = 'comedy_comparisons'
@@ -13,7 +18,7 @@ def main():
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
-        for row in data:
+        for row in take(5, data):
             print row
 
 if __name__ == "__main__":
