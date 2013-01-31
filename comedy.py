@@ -10,6 +10,8 @@ def main():
     test_data = os.path.join(datadir, subdir, test_file)
     csvfile = open(test_data, 'r')
     print csvfile
+    csvfile.close()
+    print csvfile
 
 if __name__ == "__main__":
     main()
