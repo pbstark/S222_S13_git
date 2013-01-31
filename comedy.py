@@ -10,6 +10,12 @@ def take(n, iterable):
     "Return first n items of the iterable as a list"
     return list(islice(iterable, n))
 
+def normalize(a, b, key):
+    if key == 'left':
+        return [a,b]
+    else:
+        return [b,a]
+
 def main():
     subdir = 'comedy_comparisons'
     test_file = 'comedy_comparisons.test'
@@ -19,7 +25,7 @@ def main():
         data = csv.reader(csvfile, delimiter=',')
 
         for row in take(5, data):
-            print row
+            print normalize(row[0],row[1],row[2])
 
 if __name__ == "__main__":
     main()
