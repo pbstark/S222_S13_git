@@ -2,6 +2,7 @@
 
 import csv
 from itertools import islice
+from logging import debug, info, error
 import os.path
 import sqlite3
 
@@ -30,11 +31,11 @@ def convert_comedy_comparisons(conn):
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
-        print "Sample data from csv file"
+        debug("Sample data from csv file")
         for row in take(5, data):
-            print normalize(*row)
+            debug(normalize(*row))
 
-        print "Converting csv data into sqlite3..."
+        info("Converting csv data into sqlite3...")
         c = conn.cursor()
         c.execute("""
           CREATE TABLE preference (
@@ -47,7 +48,7 @@ def convert_comedy_comparisons(conn):
         conn.commit()
         c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
         for row in c:
-            print row
+            debug(row)
 
 class ComedyComparison:
     yt_service = None
@@ -73,7 +74,7 @@ def main():
             try:
                 print comparison.is_better_than(best, runnerup)
             except gdata.service.RequestError, err:
-                print err
+                error(err)
 
 if __name__ == "__main__":
     main()
