@@ -30,11 +30,10 @@ def main():
             print normalize(*row)
 
         print "Converting csv data into sqlite3..."
-        conn = sqlite3.connect(':memory:')
-        c = conn.cursor()
-        # c.execute('''WRITE SOME SQL TO DO SOMETHING''')
-        conn.commit()
-        conn.close()
+        with sqlite3.connect(':memory:') as conn:
+            c = conn.cursor()
+            # c.execute('''WRITE SOME SQL TO DO SOMETHING''')
+            conn.commit()
 
 if __name__ == "__main__":
     main()
