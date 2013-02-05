@@ -2,6 +2,7 @@
 
 import csv
 from itertools import islice
+import logging
 from logging import debug, info, error
 import os.path
 import sqlite3
@@ -63,6 +64,8 @@ class ComedyComparison:
         return value
 
 def main():
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
     with sqlite3.connect(':memory:') as conn:
         convert_comedy_comparisons(conn)
 
