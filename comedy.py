@@ -60,7 +60,7 @@ class ComedyComparison:
     def is_better_than(self, best, runnerup):
         best_entry = self.yt_service.GetYouTubeVideoEntry(video_id=best)
         runnerup_entry = self.yt_service.GetYouTubeVideoEntry(video_id=runnerup)
-        value = best_entry.media.title.text + "is better than" + runnerup_entry.media.title.text
+        value = best_entry.media.title.text + " is better than " + runnerup_entry.media.title.text
         return value
 
 def main():
