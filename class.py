@@ -32,25 +32,21 @@ def convert_comedy_comparisons(conn):
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
-        debug("Sample data from csv file")
-        for row in take(5, data):
-            debug(normalize(*row))
-
         info("Converting csv data into sqlite3...")
         c = conn.cursor()
         c.execute("""
-          CREATE TABLE test_set (
-          	ID1 varchar(250),
-          	ID2 varchar(250),
-          	LR varchar(25))
+        	create table test_set (
+        		ID1 varchar(250),
+        		ID2 varchar(250),
+        		LR  varchar(25)
           """)
         conn.commit()
-#        c.execute("""
-#        	create table AllIDsNoDup select temp.* from (
-#        		(select ID1 from test_set)
-#        		union
-#        		(select ID2 from test_set)
-#        		)temp""")
+        c.execute("""
+        	create table AllIDsNoDup select temp.* from (
+        		(select ID1 from test_set)
+        		union
+        		(select ID2 from test_set)
+        		)temp""")
 
 
 class ComedyComparison:
@@ -68,18 +64,11 @@ class ComedyComparison:
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    with sqlite3.connect(':memory:') as conn:
+    with sqlite3.connect('data.db') as conn:
         convert_comedy_comparisons(conn)
 
         comparison = ComedyComparison()
 
-        c = conn.cursor()
-        c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
-        for (best, runnerup) in c:
-            try:
-                print comparison.is_better_than(best, runnerup)
-            except gdata.service.RequestError, err:
-                error(err)
 
 if __name__ == "__main__":
     main()
