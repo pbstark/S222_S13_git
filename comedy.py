@@ -66,7 +66,7 @@ class ComedyComparison:
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    with sqlite3.connect(':memory:') as conn:
+    with sqlite3.connect('comedy.db') as conn:
         convert_comedy_comparisons(conn)
 
         comparison = ComedyComparison()
