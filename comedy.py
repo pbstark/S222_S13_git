@@ -47,7 +47,11 @@ def convert_comedy_comparisons(conn):
         for row in data:
             c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
         conn.commit()
-        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+        c.execute("""create table idtogether (
+           -> id VARCHAR(100));
+           insert into idtogether(id) select (id1) from test_set;
+           insert into idtogether(id) select (id2) from test_set;
+           select distinct id from idtogether;""")
         for row in c:
             debug(row)
 
