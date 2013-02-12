@@ -63,21 +63,26 @@ class ComedyComparison:
         value = best_entry.media.title.text + " is better than " + runnerup_entry.media.title.text
         return value
 
+def initialize_database(conn):
+    convert_comedy_comparisons(conn)
+
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    with sqlite3.connect('comedy.db') as conn:
-        convert_comedy_comparisons(conn)
+    dbfile = 'comedy.db'
+    if not os.path.exists(dbfile):
+        with sqlite3.connect(dbfile) as conn:
+            initialize_database(conn)
 
-        comparison = ComedyComparison()
+    comparison = ComedyComparison()
 
-        c = conn.cursor()
-        c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
-        for (best, runnerup) in c:
-            try:
-                print comparison.is_better_than(best, runnerup)
-            except gdata.service.RequestError, err:
-                error(err)
+    c = conn.cursor()
+    c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
+    for (best, runnerup) in c:
+        try:
+            print comparison.is_better_than(best, runnerup)
+        except gdata.service.RequestError, err:
+            error(err)
 
 if __name__ == "__main__":
     main()
