@@ -24,7 +24,7 @@ def normalize(a, b, key):
         # runnerup
         return [b,a]
 
-def comedy_unique_id(conn):
+def convert_comedy_comparisons(conn):
     subdir = 'comedy_comparisons'
     test_file = 'comedy_comparisons.test'
     test_data = os.path.join(datadir, subdir, test_file)
@@ -39,19 +39,15 @@ def comedy_unique_id(conn):
         info("Converting csv data into sqlite3...")
         c = conn.cursor()
         c.execute("""
-          CREATE TABLE com (
-            id1 TEXT,
-            id2 TEXT,
-            bool TEXT)
+          CREATE TABLE preference (
+            id INTEGER PRIMARY KEY,
+            best TEXT,
+            runnerup TEXT)
           """)
         for row in data:
-            c.execute("""INSERT INTO com (id1, id2) VALUES (?, ?)""", normalize(*row))
+            c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
         conn.commit()
-        c.execute("""SELECT DISTINCT(id) FROM (
-SELECT id1 AS id FROM com
-UNION ALL
-SELECT id2 AS id FROM com
-) AS Temp""")
+        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
         for row in c:
             debug(row)
 
@@ -70,18 +66,18 @@ class ComedyComparison:
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    with sqlite3.connect(':memory:') as conn:
-        comedy_unique_id(conn)
+    with sqlite3.connect('comedy.db') as conn:
+        convert_comedy_comparisons(conn)
 
-        #comparison = ComedyComparison()
+        comparison = ComedyComparison()
 
-        #c = conn.cursor()
-        #c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
-        #for (best, runnerup) in c:
-        #   try:
-        #        print comparison.is_better_than(best, runnerup)
-        #    except gdata.service.RequestError, err:
-        #        error(err)
+        c = conn.cursor()
+        c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
+        for (best, runnerup) in c:
+            try:
+                print comparison.is_better_than(best, runnerup)
+            except gdata.service.RequestError, err:
+                error(err)
 
 if __name__ == "__main__":
     main()
