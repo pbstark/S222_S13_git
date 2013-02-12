@@ -6,6 +6,8 @@ import logging
 from logging import debug, info, error
 import os.path
 import sqlite3
+import sys
+import getopt
 
 import gdata.youtube
 import gdata.youtube.service
@@ -52,6 +54,10 @@ def convert_comedy_comparisons(conn):
     for row in c:
         debug(row)
 
+class Usage(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 class ComedyComparison:
     yt_service = None
     dbfile = 'comedy.db'
@@ -79,10 +85,21 @@ class ComedyComparison:
 def initialize_database(conn):
     convert_comedy_comparisons(conn)
 
-def main():
+def main(argv=None):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    comparison = ComedyComparison()
+    if argv is None:
+        argv = sys.argv
+    try:
+        try:
+            opts, args = getopt.getopt(argv[1:], "h", ["help"])
+        except getopt.error, msg:
+             raise Usage(msg)
+        comparison = ComedyComparison()
+    except Usage, err:
+        print >>sys.stderr, err.msg
+        print >>sys.stderr, "for help use --help"
+        return 2
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
