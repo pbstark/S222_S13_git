@@ -41,13 +41,14 @@ def convert_comedy_comparisons(conn):
     c.execute("""
       CREATE TABLE preference (
         id INTEGER PRIMARY KEY,
-        best TEXT,
-        runnerup TEXT)
+        left TEXT,
+        right TEXT,
+        key TEXT)
       """)
     for row in data:
-        c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
+        c.execute("""INSERT INTO preference (left, right, key) VALUES (?, ?, ?)""", row)
     conn.commit()
-    c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+    c.execute("""SELECT left, right, key FROM preference LIMIT 5""")
     for row in c:
         debug(row)
 
@@ -77,10 +78,10 @@ def main():
     comparison = ComedyComparison()
 
     c = conn.cursor()
-    c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
-    for (best, runnerup) in c:
+    c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
+    for (a, b, key) in c:
         try:
-            print comparison.is_better_than(best, runnerup)
+            print comparison.is_better_than(normalize(a, b, key))
         except gdata.service.RequestError, err:
             error(err)
 
