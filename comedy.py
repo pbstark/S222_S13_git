@@ -32,21 +32,21 @@ def convert_comedy_comparisons(conn):
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
-    debug("Sample data from csv file")
-    for row in take(5, data):
-        debug(normalize(*row))
+        debug("Sample data from csv file")
+        for row in take(5, data):
+            debug(normalize(*row))
 
-    info("Converting csv data into sqlite3...")
-    c = conn.cursor()
-    c.execute("""
-      CREATE TABLE preference (
-        id INTEGER PRIMARY KEY,
-        left TEXT,
-        right TEXT,
-        key TEXT)
-      """)
-    for row in data:
-        c.execute("""INSERT INTO preference (left, right, key) VALUES (?, ?, ?)""", row)
+        info("Converting csv data into sqlite3...")
+        c = conn.cursor()
+        c.execute("""
+          CREATE TABLE preference (
+            id INTEGER PRIMARY KEY,
+            left TEXT,
+            right TEXT,
+            key TEXT)
+          """)
+        for row in data:
+            c.execute("""INSERT INTO preference (left, right, key) VALUES (?, ?, ?)""", row)
     conn.commit()
     c.execute("""SELECT left, right, key FROM preference LIMIT 5""")
     for row in c:
