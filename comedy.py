@@ -81,7 +81,7 @@ def main():
     c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
     for (a, b, key) in c:
         try:
-            print comparison.is_better_than(normalize(a, b, key))
+            print comparison.is_better_than(*normalize(a, b, key))
         except gdata.service.RequestError, err:
             error(err)
 
