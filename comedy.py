@@ -59,14 +59,14 @@ class ComedyComparison:
     def __init__(self):
         self.yt_service = gdata.youtube.service.YouTubeService()
 
-        if not os.path.exists(dbfile):
-            with sqlite3.connect(dbfile) as conn:
+        if not os.path.exists(self.dbfile):
+            with sqlite3.connect(self.dbfile) as conn:
                 initialize_database(conn)
             c = conn.cursor()
             c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
             for (a, b, key) in c:
                 try:
-                    print comparison.is_better_than(*normalize(a, b, key))
+                    print self.is_better_than(*normalize(a, b, key))
                 except gdata.service.RequestError, err:
                     error(err)
 
