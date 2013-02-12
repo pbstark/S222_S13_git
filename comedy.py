@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import csv
-from itertools import islice
+from   itertools import islice
 import logging
-from logging import debug, info, error
+from   logging   import debug, info, error
 import os.path
 import sqlite3
 import sys
@@ -29,9 +29,11 @@ def normalize(a, b, key):
 def convert_comedy_comparisons(conn):
     subdir = 'comedy_comparisons'
     test_file = 'comedy_comparisons.test'
+    train_file = 'comedy_comparisons.train'
     test_data = os.path.join(datadir, subdir, test_file)
+    train_data = os.path.join(datadir, subdir, train_file)
     data = None
-    with open(test_data, 'r') as csvfile:
+    with open(train_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
         debug("Sample data from csv file")
@@ -41,18 +43,22 @@ def convert_comedy_comparisons(conn):
         info("Converting csv data into sqlite3...")
         c = conn.cursor()
         c.execute("""
-          CREATE TABLE preference (
+          CREATE TABLE trainPreference (
             id INTEGER PRIMARY KEY,
             left TEXT,
             right TEXT,
             key TEXT)
           """)
         for row in data:
-            c.execute("""INSERT INTO preference (left, right, key) VALUES (?, ?, ?)""", row)
+            c.execute("""INSERT INTO trainPreference (left, right, key) VALUES (?, ?, ?)""", row)
     conn.commit()
-    c.execute("""SELECT left, right, key FROM preference LIMIT 5""")
+    c.execute("""SELECT left, right, key FROM trainPreference LIMIT 5""")
     for row in c:
         debug(row)
+
+    c.execute("""SELECT left as "vidID" FROM trainPreference UNION SELECT right from trainPreference""")
+    uniqueTrainIDs = set(c)
+    debug("found " + str(len(uniqueTrainIDs)) + " unique video IDs")
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -60,7 +66,7 @@ class Usage(Exception):
 
 class ComedyComparison:
     yt_service = None
-    dbfile = 'comedy.db'
+    dbfile = 'comedyTrain.db'
 
     def __init__(self):
         self.yt_service = gdata.youtube.service.YouTubeService()
@@ -69,7 +75,7 @@ class ComedyComparison:
             with sqlite3.connect(self.dbfile) as conn:
                 initialize_database(conn)
             c = conn.cursor()
-            c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
+            c.execute("""SELECT left, right, key FROM trainPreference ORDER BY RANDOM() LIMIT 5""")
             for (a, b, key) in c:
                 try:
                     print self.is_better_than(*normalize(a, b, key))
