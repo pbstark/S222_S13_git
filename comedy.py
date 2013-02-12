@@ -54,9 +54,21 @@ def convert_comedy_comparisons(conn):
 
 class ComedyComparison:
     yt_service = None
+    dbfile = 'comedy.db'
 
     def __init__(self):
         self.yt_service = gdata.youtube.service.YouTubeService()
+
+        if not os.path.exists(dbfile):
+            with sqlite3.connect(dbfile) as conn:
+                initialize_database(conn)
+            c = conn.cursor()
+            c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
+            for (a, b, key) in c:
+                try:
+                    print comparison.is_better_than(*normalize(a, b, key))
+                except gdata.service.RequestError, err:
+                    error(err)
 
     def is_better_than(self, best, runnerup):
         best_entry = self.yt_service.GetYouTubeVideoEntry(video_id=best)
@@ -70,20 +82,7 @@ def initialize_database(conn):
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    dbfile = 'comedy.db'
-    if not os.path.exists(dbfile):
-        with sqlite3.connect(dbfile) as conn:
-            initialize_database(conn)
-
     comparison = ComedyComparison()
-
-    c = conn.cursor()
-    c.execute("""SELECT left, right, key FROM preference ORDER BY RANDOM() LIMIT 5""")
-    for (a, b, key) in c:
-        try:
-            print comparison.is_better_than(*normalize(a, b, key))
-        except gdata.service.RequestError, err:
-            error(err)
 
 if __name__ == "__main__":
     main()
