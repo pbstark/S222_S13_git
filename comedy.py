@@ -32,24 +32,24 @@ def convert_comedy_comparisons(conn):
     with open(test_data, 'r') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
 
-        debug("Sample data from csv file")
-        for row in take(5, data):
-            debug(normalize(*row))
+    debug("Sample data from csv file")
+    for row in take(5, data):
+        debug(normalize(*row))
 
-        info("Converting csv data into sqlite3...")
-        c = conn.cursor()
-        c.execute("""
-          CREATE TABLE preference (
-            id INTEGER PRIMARY KEY,
-            best TEXT,
-            runnerup TEXT)
-          """)
-        for row in data:
-            c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
-        conn.commit()
-        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
-        for row in c:
-            debug(row)
+    info("Converting csv data into sqlite3...")
+    c = conn.cursor()
+    c.execute("""
+      CREATE TABLE preference (
+        id INTEGER PRIMARY KEY,
+        best TEXT,
+        runnerup TEXT)
+      """)
+    for row in data:
+        c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
+    conn.commit()
+    c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
+    for row in c:
+        debug(row)
 
 class ComedyComparison:
     yt_service = None
