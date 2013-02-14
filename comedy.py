@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-#!/usr/bin/env python
-=======
+
 #!/usr/bin/env python
 
 import csv
@@ -42,18 +40,20 @@ def convert_comedy_comparisons(conn):
         info("Converting csv data into sqlite3...")
         c = conn.cursor()
         c.execute("""
-          CREATE TABLE preference (
-            id INTEGER PRIMARY KEY,
-            best TEXT,
-            runnerup TEXT)
-          """)
+          c.execute("""
+			CREATE TABLE com (
+			id1 var(11),
+			id2 var(11),
+			LR TEXT)
+			""")
         for row in data:
             c.execute("""INSERT INTO preference (best, runnerup) VALUES (?, ?)""", normalize(*row))
         conn.commit()
-        c.execute("""SELECT best, runnerup FROM preference LIMIT 5""")
-        for row in c:
-            debug(row)
-
+        c.execute("""SELECT id FROM (
+		SELECT id1 AS id FROM com
+		UNION
+		SELECT id2 AS id  FROM com
+		)AS temp;""")
 class ComedyComparison:
     yt_service = None
 
@@ -84,4 +84,4 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> 85b65607a76f2b076556aaa01b41fffe67aa7892
+
