@@ -96,10 +96,29 @@ def main(argv=None):
         except getopt.error, msg:
              raise Usage(msg)
         comparison = ComedyComparison()
+<<<<<<< HEAD
     except Usage, err:
         print >>sys.stderr, err.msg
         print >>sys.stderr, "for help use --help"
         return 2
+=======
+
+        c = conn.cursor()
+        c.execute("""SELECT best, runnerup FROM preference ORDER BY RANDOM() LIMIT 5""")
+        for (best, runnerup) in c:
+            try:
+                print comparison.is_better_than(best, runnerup)
+            except gdata.service.RequestError, err:
+                error(err)
+        c.execute("""
+            CREATE TABLE uniqueid (
+                uid TEXT)
+            """)
+        c.execute("""SELECT DISTINCT best FROM preference UNION SELECT DISTINCT runnerup FROM preference""")
+        for row in c:
+            c.execute("""INSERT INTO uniqueid""")
+            print row
+>>>>>>> d7faf5e0c423de8569b671e1a91ba746d1f683ab
 
 if __name__ == "__main__":
     sys.exit(main())
