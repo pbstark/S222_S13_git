@@ -16,6 +16,8 @@ from scipy.sparse.linalg import spsolve
 from numpy.linalg import solve, norm
 from numpy.random import rand
 
+import networkx as nx
+from matplotlib import pyplot, patches
 
 datadir = 'Data'
 
@@ -71,9 +73,6 @@ def comedy_unique_id(conn):
 		for row in uniqpair:
 				A[dic[row[0]],dic[row[1]]] = row[2]
                 return A
-
-import networkx as nx
-from matplotlib import pyplot, patches
 
 def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
     """
