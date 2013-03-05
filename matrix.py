@@ -117,6 +117,10 @@ def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
 
 #draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
 
+def ntake(n, iterable):
+    "Return first n items of the iterable as a list"
+    return list(islice(iterable, n))
+
 def main():
 	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
                 try:
