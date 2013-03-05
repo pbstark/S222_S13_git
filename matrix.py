@@ -36,7 +36,7 @@ def comedy_unique_id(conn):
 	with open(test_data, 'r') as csvfile: #
 	#using with it knows to close it
 		data = csv.reader(csvfile, delimiter=',')
-		
+
 		print "Converting csv data into sqlite3..."
 		c = conn.cursor()
 		# c.execute('''WRITE SOME SQL TO DO SOMETHING''')
@@ -94,7 +94,7 @@ def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
     pyplot.imshow(adjacency_matrix,
                   cmap="Greys",
                   interpolation="none")
-    
+
     # The rest is just if you have sorted nodes by a partition and want to
     # highlight the module boundaries
     assert len(partitions) == len(colors)
@@ -111,10 +111,10 @@ def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
             current_idx += len(module)
 
 draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
-		
+
 def main():
 	with sqlite3.connect(':memory:') as conn: #With is gonna guarantee it's gonna close automatically
 		 comedy_unique_id(conn)
 
 if __name__ =="__main__":
-	main()	
+	main()
