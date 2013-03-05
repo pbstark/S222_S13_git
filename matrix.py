@@ -54,7 +54,7 @@ def initialize_comedy_data(conn):
 	#using with it knows to close it
 		data = csv.reader(csvfile, delimiter=',')
 
-		print "Converting csv data into sqlite3..."
+                info("Converting csv data into sqlite3...")
 		c = conn.cursor()
 		# c.execute('''WRITE SOME SQL TO DO SOMETHING''')
 		c.execute("""
