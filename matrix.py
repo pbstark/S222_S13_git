@@ -116,7 +116,11 @@ def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
 
 def main():
 	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
-                A = initialize_comedy_data(conn)
+                try:
+                        initialize_comedy_data(conn)
+                except sqlite3.OperationalError, err:
+                        info("comedy data already inititalized")
+
 
 if __name__ =="__main__":
 	main()
