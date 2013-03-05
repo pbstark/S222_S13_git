@@ -9,6 +9,9 @@ import sqlite3
 import sys
 import getopt
 
+import numpy
+from scipy.sparse.csgraph
+
 import gdata.youtube
 import gdata.youtube.service
 
