@@ -112,7 +112,7 @@ def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
                                           linewidth="1"))
             current_idx += len(module)
 
-draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
+#draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
 
 def main():
 	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
