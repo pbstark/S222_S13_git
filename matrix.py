@@ -30,7 +30,18 @@ def normalize(a, b, key):
 def clean(s,x=3):
 	return str(s)[x:-x]
 
-def unique_pair_matrix(c):
+def unique_pair_matrix(conn):
+        c = conn.cursor()
+
+        c.execute("""SELECT DISTINCT(id) FROM (
+        SELECT id1 AS id FROM com
+        UNION ALL
+        SELECT id2 AS id  FROM com
+        )AS temp;""")
+        uniq =  c.fetchall()
+
+        dic = dict([(clean(b),a) for (a,b) in enumerate(uniq)])
+
         c.execute("""SELECT id1, id2, COUNT(*)
         FROM com GROUP BY id1, id2
         ORDER BY COUNT(*) DESC;""")
@@ -68,14 +79,6 @@ def initialize_comedy_data(conn):
 		conn.commit()
 				#conn.close()
 				#Close the connection
-		c.execute("""SELECT DISTINCT(id) FROM (
-		SELECT id1 AS id FROM com
-		UNION ALL
-		SELECT id2 AS id  FROM com
-		)AS temp;""")
-		uniq =  c.fetchall()
-
-		dic = dict([(clean(b),a) for (a,b) in enumerate(uniq)])
 
 def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
     """
@@ -120,7 +123,6 @@ def main():
                         initialize_comedy_data(conn)
                 except sqlite3.OperationalError, err:
                         info("comedy data already inititalized")
-
 
 if __name__ =="__main__":
 	main()
