@@ -126,8 +126,8 @@ def main():
                 try:
                         initialize_comedy_data(conn)
                 except sqlite3.OperationalError, err:
-                        info("comedy data already inititalized")
+                        info("comedy data already initialized")
                 A = unique_pair_matrix(conn)
-                print ntake(20,A)
+                info ntake(20,A)
 if __name__ =="__main__":
 	main()
