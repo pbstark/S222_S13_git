@@ -76,18 +76,6 @@ def initialize_comedy_data(conn):
 		uniq =  c.fetchall()
 
 		dic = dict([(clean(b),a) for (a,b) in enumerate(uniq)])
-		c.execute("""SELECT id1, id2, COUNT(*)
-		FROM com GROUP BY id1, id2
-		ORDER BY COUNT(*) DESC;""")
-		#uniqpair_len = c.rowcount
-		uniqpair = c.fetchall()
-		#print uniqpair[1][1]
-
-		A = lil_matrix((len(dic),len(dic)))
-		# Upper triangle means rows funnier than columns; Vice versa
-		for row in uniqpair:
-				A[dic[row[0]],dic[row[1]]] = row[2]
-                return A
 
 def draw_adjacency_matrix(G, node_order=None, partitions=[], colors=[]):
     """
@@ -128,7 +116,7 @@ draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
 
 def main():
 	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
-                A = comedy_unique_id(conn)
+                A = initialize_comedy_data(conn)
 
 if __name__ =="__main__":
 	main()
