@@ -70,7 +70,7 @@ def comedy_unique_id(conn):
 		# Upper triangle means rows funnier than columns; Vice versa
 		for row in uniqpair:
 				A[dic[row[0]],dic[row[1]]] = row[2]
-		print A[0:2000,0:2000]
+                return A
 
 import networkx as nx
 from matplotlib import pyplot, patches
@@ -114,7 +114,7 @@ draw_adjacency_matrix(nx.from_scipy_sparse_matrix(A))
 
 def main():
 	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
-		 comedy_unique_id(conn)
+                A = comedy_unique_id(conn)
 
 if __name__ =="__main__":
 	main()
