@@ -30,7 +30,22 @@ def normalize(a, b, key):
 def clean(s,x=3):
 	return str(s)[x:-x]
 
-def comedy_unique_id(conn):
+def unique_pair_matrix(c):
+        c.execute("""SELECT id1, id2, COUNT(*)
+        FROM com GROUP BY id1, id2
+        ORDER BY COUNT(*) DESC;""")
+        #uniqpair_len = c.rowcount
+        uniqpair = c.fetchall()
+        #print uniqpair[1][1]
+
+        A = lil_matrix((len(dic),len(dic)))
+        # Upper triangle means rows funnier than columns; Vice versa
+        for row in uniqpair:
+                        A[dic[row[0]],dic[row[1]]] = row[2]
+        return A
+
+
+def initialize_comedy_data(conn):
 	subdir = 'comedy_comparisons'
 	test_file = 'comedy_comparisons.train'
 	test_data = os.path.join(datadir, subdir, test_file)
