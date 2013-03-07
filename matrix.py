@@ -10,6 +10,7 @@ import gdata.youtube.service
 import numpy as np
 import json, ast
 
+import pickle
 
 from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
@@ -122,12 +123,22 @@ def ntake(n, iterable):
     return list(islice(iterable, n))
 
 def main():
-	with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
-                try:
-                        initialize_comedy_data(conn)
-                except sqlite3.OperationalError, err:
-                        info("comedy data already initialized")
-                A = unique_pair_matrix(conn)
-                info ntake(20,A)
+        pf = 'matrix.pickle'
+        try:
+                with open(pf, "r") as f:
+                        A = pickle.load(f)
+        except Exception:
+                error("pickle file was not found, so we initialize it")
+                with sqlite3.connect('matrix.db') as conn: #With is gonna guarantee it's gonna close automatically
+                        try:
+                                initialize_comedy_data(conn)
+                        except sqlite3.OperationalError, err:
+                                info("comedy data already initialized")
+                        A = unique_pair_matrix(conn)
+                        with open(pf, "w") as f:
+                                pickle.dump(A, f)
+
+        print ntake(20,A)
+                
 if __name__ =="__main__":
 	main()
