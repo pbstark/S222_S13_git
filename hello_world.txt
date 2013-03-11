@@ -1,8 +1,0 @@
-Please add your name, then commit and push the commit back to github!  Philip
-David Goldschmidt
-Aaron Culich
-Weinan Wang
-Nanyu Chen
-Shuang Bi
-Xijia Lu
-Wenchang Zhang
